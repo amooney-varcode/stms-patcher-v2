@@ -2,5 +2,5 @@ FROM nginx:alpine
 EXPOSE 7776
 RUN rm -f /etc/nginx/conf.d/default.conf
 COPY ./cer/nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./cer/localhost.key /etc/ssl/auth-proxy/localhost.key
-COPY ./cer/localhost.crt /etc/ssl/auth-proxy/localhost.crt
+COPY ./cer/localhost.key /etc/ssl/stms-patcher-v2/localhost.key
+COPY ./cer/localhost.crt /etc/ssl/stms-patcher-v2/localhost.crt
