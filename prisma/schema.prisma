@@ -1,0 +1,714 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Alerts {
+  AlertId           Int      @id(map: "PK_Alerts") @default(autoincrement())
+  CustomerNumber    String?  @db.NVarChar(20)
+  AlertName         String?  @db.NVarChar(50)
+  AlertMessage      String?  @db.NVarChar(1024)
+  Sender            String?  @db.NVarChar(1024)
+  ParamID1          Int?
+  ParamID2          Int?
+  ParamID3          Int?
+  Email1            String?  @db.NVarChar(1024)
+  Email2            String?  @db.NVarChar(1024)
+  Email3            String?  @db.NVarChar(1024)
+  Email4            String?  @db.NVarChar(1024)
+  Email5            String?  @db.NVarChar(1024)
+  SMS1              String?  @db.NVarChar(1024)
+  SMS2              String?  @db.NVarChar(1024)
+  SMS3              String?  @db.NVarChar(1024)
+  SMS4              String?  @db.NVarChar(1024)
+  SMS5              String?  @db.NVarChar(1024)
+  ParamID4          Int?
+  AlertLabel        String?  @db.NVarChar(1024)
+  ShowAlert         Boolean?
+  ShowDate          Boolean?
+  DateLabel         String?  @db.NVarChar(1024)
+  ThermoTraceLabel  String?  @db.NVarChar(1024)
+  ShowThermoTrace   Boolean?
+  DeliveryNoteLabel String?  @db.NVarChar(1024)
+  ShowDeliveryNote  Boolean?
+  ReaderLabel       String?  @db.NVarChar(1024)
+  ShowReader        Boolean?
+  SiteLabel         String?  @db.NVarChar(1024)
+  ShowSite          Boolean?
+  BarcodeIDLabel    String?  @db.NVarChar(1024)
+  ShowBarcodeID     Boolean?
+
+  @@unique([CustomerNumber, AlertName], map: "IX_Alerts_CustomerNumber_AlertName")
+}
+
+model AlertsParameter {
+  Id    Int     @id(map: "PK_AlertsParameter")
+  Value String? @db.NVarChar(30)
+}
+
+model Boxes {
+  BoxNumber          String    @id(map: "PK_Boxes") @db.NVarChar(20)
+  FirstLabelNo       String?   @db.NVarChar(20)
+  LastLabelNo        String?   @db.NVarChar(20)
+  NoOfLabels         Int?
+  LabelType          String?   @db.NVarChar(50)
+  Remarks            String?   @db.NVarChar(50)
+  CustomerNumber     String?   @db.NVarChar(20)
+  ProfileID          Int?
+  UserCreatedID      Int?
+  DateTimeCreated    DateTime? @db.DateTime
+  AssignCustByUserID Int?
+  AssignCustDateTime DateTime? @db.DateTime
+  IndexID            Int       @default(autoincrement())
+  OperatorName       String?   @db.NVarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BoxesInCartons {
+  ID           Int     @default(autoincrement())
+  CartonNumber String? @db.NVarChar(50)
+  BoxNumber    String? @db.NVarChar(20)
+
+  @@ignore
+}
+
+model Cartons {
+  ID              Int       @default(autoincrement())
+  CartonNumber    String    @id(map: "PK_Cartons") @db.NVarChar(50)
+  BoxesAmount     Int?
+  CustomerNumber  String?   @db.NVarChar(20)
+  Remarks         String?   @db.NVarChar(1024)
+  DateTimeCreated DateTime? @db.DateTime
+  OrderNumber     String?   @db.NVarChar(50)
+  UserCreatedID   Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Covid19Patients {
+  ID                Int       @default(autoincrement())
+  IDNumber          String    @db.NVarChar(50)
+  Name              String    @db.NVarChar(50)
+  Address           String?   @db.NVarChar(50)
+  Birthdate         DateTime? @db.Date
+  Gender            String?   @db.NVarChar(50)
+  Temperature       String?   @db.NVarChar(50)
+  Cold              Boolean?
+  ColdDays          String?   @db.NVarChar(50)
+  Covid19           Boolean?
+  Covid19Days       String?   @db.NVarChar(50)
+  Diabetic          Boolean?
+  HeartDisease      Boolean?
+  HighBloodPressure Boolean?
+  Overweight        Boolean?
+  Smoking           Boolean?
+  DateCreated       DateTime? @db.DateTime
+  DateUpdated       DateTime? @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Covid19Scans {
+  ID          Int       @default(autoincrement())
+  PatientID   String?   @db.NVarChar(50)
+  Barcode     String?   @db.NVarChar(50)
+  Img         Bytes?    @db.Image
+  DateCreated DateTime? @db.DateTime
+  Msg         String?   @db.NVarChar(50)
+
+  @@ignore
+}
+
+model Customer {
+  CustomerNumber String    @id(map: "PK_Customer") @unique(map: "IX_Customer") @db.NVarChar(20)
+  CustomerName   String?   @db.NVarChar(50)
+  GMTID          String?   @db.NVarChar(200)
+  GmtDesc        String?   @db.NVarChar(400)
+  IndexID        Int       @default(autoincrement())
+  CreatedDate    DateTime? @db.DateTime
+}
+
+model CustomerReader {
+  CustomerNumber String @db.NVarChar(20)
+  ReaderID       Int
+
+  @@id([CustomerNumber, ReaderID], map: "PK_CustomerReader")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Display {
+  ID          Int
+  RowAmount   Int?
+  DefaultLang Int?
+
+  @@ignore
+}
+
+model ErrorMessages {
+  ID           Int     @id(map: "PK_ErrorMessages") @default(autoincrement())
+  ErrorEvent   String? @db.NVarChar(50)
+  ErrorMessage String? @db.NVarChar(150)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model GMT {
+  ID          Int?
+  GMT         String? @db.NVarChar(15)
+  Diff        Float?  @db.Real
+  Description String? @db.NVarChar(100)
+
+  @@ignore
+}
+
+model InterfaceLanguages {
+  ID          Int     @id(map: "PK_InterfaceLanguages") @default(autoincrement())
+  LanguageDef String? @db.NVarChar(50)
+  Language    String? @db.NVarChar(50)
+  LangCode    String? @db.NVarChar(20)
+}
+
+model Labels {
+  ID               Int       @default(autoincrement())
+  LabelID          String    @id(map: "PK_Labels") @db.NVarChar(50)
+  BoxNumber        String?   @db.NVarChar(20)
+  ModelNumber      String?   @db.NVarChar(50)
+  VersionNumber    String?   @db.NVarChar(20)
+  LabelTemp        String?   @db.NVarChar(20)
+  CreatedDate      DateTime? @db.DateTime
+  MachineNumber    String?   @db.NVarChar(50)
+  OrderNumber      String?   @db.NVarChar(50)
+  InkVolume        String?   @db.NVarChar(20)
+  InkBatchNumber   String?   @db.NVarChar(50)
+  PillowID         String?   @db.NVarChar(50)
+  ConductorID      String?   @db.NVarChar(50)
+  OperatorName     String?   @db.NVarChar(50)
+  DateTimeInserted DateTime? @db.DateTime
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model LOG_USER_ACTION {
+  ID         Int      @default(autoincrement())
+  UserID     Int?
+  TableName  String?  @db.NVarChar(1024)
+  Action     String?  @db.NVarChar(50)
+  RowID      Int?
+  CreateDate DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model LOGS {
+  LogText String? @db.NVarChar(Max)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model MailParameters {
+  MailFrom     String? @db.NVarChar(50)
+  StmpServer   String? @db.NVarChar(50)
+  SendUserName String? @db.NVarChar(50)
+  SendPassword String? @db.NVarChar(50)
+
+  @@ignore
+}
+
+model MasterSonRecorders {
+  ID              Int       @default(autoincrement())
+  LabelID         String    @id(map: "PK_MasterSonRecorders") @db.NVarChar(20)
+  IsMaster        Boolean?
+  IsSon           Boolean?
+  MasterID        String?   @db.NVarChar(20)
+  UserCreatedID   Int?
+  DateTimeCreated DateTime? @db.DateTime
+  Del             Boolean?
+}
+
+model Order_Delivery {
+  ID                 Int       @id(map: "PK_Table_1") @default(autoincrement())
+  OrderID            Int
+  ShippedBy          String?   @db.NVarChar(100)
+  ShippedDate        DateTime? @db.DateTime
+  TrackingNumber     String?   @db.NVarChar(100)
+  LinkTrackingNumber String?   @db.NVarChar(500)
+  ShippingMethod     String?   @db.NVarChar(200)
+}
+
+model Order_Production {
+  ID                  Int       @id(map: "PK_Order_Production") @default(autoincrement())
+  OrderID             Int
+  AssignToName        String?   @db.NVarChar(100)
+  RawMaterialInStock  Boolean?
+  RawMaterialDetails  String?   @db.NVarChar(500)
+  PrintInStock        Boolean?
+  PrintDetails        String?   @db.NVarChar(500)
+  StartProductionDate DateTime? @db.DateTime
+  EndProductionDate   DateTime? @db.DateTime
+  PassedQAName        String?   @db.NVarChar(100)
+  PassedQADate        DateTime? @db.DateTime
+  BoxNumber           String?   @db.NVarChar(100)
+  CartonNumber        String?   @db.NVarChar(100)
+  ProductionComments  String?   @db.NVarChar(500)
+  ApprovedBy          String?   @db.NVarChar(100)
+}
+
+model Order_Statuses {
+  ID         Int     @id(map: "PK_Order_Statuses") @default(autoincrement())
+  StatusID   Int?
+  StatusName String? @db.NVarChar(20)
+  SubStatus  String? @db.NVarChar(50)
+}
+
+model Orders_Shipping {
+  ID               Int       @id(map: "PK_Orders_Shipping") @default(autoincrement())
+  OrderByID        Int?
+  ProductID        String?   @db.NVarChar(50)
+  Quantity         Int?
+  CustomerID       String?   @db.NVarChar(20)
+  ProfileID        Int?
+  Date             DateTime? @db.DateTime
+  OrderComments    String?   @db.NVarChar(500)
+  ShippingInfoName String?   @db.NVarChar(100)
+  Address1         String?   @db.NVarChar(200)
+  Address2         String?   @db.NVarChar(200)
+  City             String?   @db.NVarChar(100)
+  State            String?   @db.NVarChar(100)
+  Country          String?   @db.NVarChar(200)
+  Postal           String?   @db.NVarChar(50)
+  Phone1           String?   @db.NVarChar(200)
+  Phone2           String?   @db.NVarChar(200)
+  InvoiceAmount    Int?
+  OrderStatus      Int?
+  CreatedDate      DateTime? @db.DateTime
+  Email            String?   @db.NVarChar(1024)
+}
+
+model OrdersStaff {
+  ID    Int     @id(map: "PK_OrdersStaff") @default(autoincrement())
+  Name  String? @db.NVarChar(100)
+  Email String? @db.NVarChar(1024)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PerformanceView_Profiles {
+  ID                Int  @default(autoincrement())
+  PerformanceViewID Int?
+  ProfileID         Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PerformanceView_Sites {
+  ID                Int?
+  PerformanceViewID Int?
+  SiteID            Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PerformanceViews {
+  ID              Int       @default(autoincrement())
+  ViewName        String?   @db.NVarChar(50)
+  StartDate       DateTime? @db.DateTime
+  EndDate         DateTime? @db.DateTime
+  CustomerNumber  String?   @db.NVarChar(20)
+  ReaderID        Int?
+  SiteID          Int?
+  ProfileID       Int?
+  DateTimeCreated DateTime? @db.DateTime
+  UserCreatedID   Int?
+  Days            Int?
+
+  @@ignore
+}
+
+model Permissions {
+  ID          Int      @id(map: "PK_Permissions") @default(autoincrement())
+  Name        String?  @db.VarChar(1024)
+  Modify      Boolean?
+  View        Boolean?
+  Description String?  @db.VarChar(1024)
+  Page        String?  @db.VarChar(1024)
+  MenuName    String?  @db.VarChar(1024)
+}
+
+model ProductsInfo {
+  ID                 Int     @id(map: "PK_Productsinfo") @default(autoincrement())
+  TermoTraceProduct  String  @db.NVarChar(50)
+  ProductDescription String? @db.NVarChar(30)
+  BaseTemp           Int?
+  ClalibrationTemp   Int?
+  TimeToQuality1     Int?
+  TimeToQuality2     Int?
+  TimeToQuality3     Int?
+  TimeToQuality4     Int?
+  TimeToQuality5     Int?
+  TimeToQuality6     Int?
+  img                Bytes?  @db.Image
+  StockCover         Int?
+  RawMaterials       Int?
+  DocumentName       String? @db.NVarChar(250)
+}
+
+model Profile {
+  ProfileID         Int      @id(map: "PK_Profile") @default(autoincrement())
+  CustomerNumber    String?  @db.NVarChar(500)
+  ProfileName       String?  @db.NVarChar(500)
+  CommodityName     String?  @db.NVarChar(1024)
+  ProductsInfoID    String?  @db.NVarChar(50)
+  AutomaticApproval Boolean?
+  NotApprovedMsg    String?  @db.NVarChar(1024)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProfileCustomersSites {
+  ProfileID      Int?
+  CustomerNumber String? @db.NVarChar(20)
+  CustomerID     Int?
+  SiteID         Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProfileMsgsTranslation {
+  ID             Int     @default(autoincrement())
+  ProfileID      Int?
+  LangID         Int?
+  NotApprovedMsg String? @db.NVarChar(1024)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProfileQCMsgsTranslation {
+  ID                 Int     @default(autoincrement())
+  ProfileID          Int?
+  LangID             Int?
+  QualityCodeNo      Int?
+  QualityCodeMessage String? @db.NVarChar(100)
+  AckMessage         String? @db.NVarChar(100)
+  FeedbackMsg        String? @db.NVarChar(1024)
+
+  @@ignore
+}
+
+model QualityCode {
+  ProfileID            Int
+  QualityCodeNo        Int
+  QualityCodeMessage   String?  @db.NVarChar(100)
+  QualityCodeColor     String?  @db.NVarChar(50)
+  QualityCodeBackColor String?  @db.NVarChar(50)
+  IsAcknowledge        Boolean?
+  AckMessage           String?  @db.NVarChar(100)
+  IsAlert              Boolean?
+  AlertID              Int?
+  URL                  String?  @db.NVarChar(1024)
+  UrlAutoLaunch        Boolean?
+  IsEmail              Boolean?
+  Days                 Int?
+  FeedbackRequest      Boolean?
+  FeedbackMsg          String?  @db.NVarChar(1024)
+  ShowPhone            Boolean?
+  PhoneNumber          String?  @db.NVarChar(50)
+
+  @@id([QualityCodeNo, ProfileID], map: "PK_QualityCode")
+  @@index([ProfileID], map: "IX_QualityCode")
+  @@index([QualityCodeNo], map: "IX_QualityCode_1")
+}
+
+model Reader {
+  ReaderID          Int       @id(map: "PK_Reader") @default(autoincrement())
+  PhoneNumber       String    @db.NVarChar(50)
+  Name              String?   @db.NVarChar(50)
+  Company           String?   @db.NVarChar(50)
+  Address           String?   @db.NVarChar(50)
+  Country           String?   @db.NVarChar(50)
+  State             String?   @db.NVarChar(50)
+  Zip               String?   @db.NVarChar(50)
+  Email             String?   @db.NVarChar(50)
+  LastCommunication DateTime? @db.DateTime
+  SWVersion         String?   @db.NVarChar(50)
+  ReaderType        String?   @db.NVarChar(50)
+  Del               Boolean?
+  LangCode          String?   @db.NVarChar(50)
+  ThemeID           Int?
+  VersionNum        Int?
+
+  @@index([PhoneNumber], map: "IX_Reader_PhoneNumbe")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ReadersSite {
+  ReaderID Int
+  SiteID   Int
+
+  @@index([SiteID], map: "IX_ReadersSite")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model RequestedScanLogs {
+  ID        Int      @default(autoincrement())
+  ScanLogID Int?
+  Requested Boolean?
+
+  @@ignore
+}
+
+model RulePermissions {
+  ID           Int      @id(map: "PK_RulePermissions") @default(autoincrement())
+  PermissionID Int?
+  RuleID       Int?
+  Modify       Boolean?
+  View         Boolean?
+}
+
+model Rules {
+  ID          Int      @id(map: "PK_Rules") @default(autoincrement())
+  Name        String?  @db.NVarChar(1024)
+  Description String?  @db.NVarChar(1024)
+  Del         Boolean?
+}
+
+model ScanHistory {
+  id           String    @id(map: "PK__ScanHist__3213E83F748AB21E") @db.UniqueIdentifier
+  userUUID     String?   @db.NVarChar(90)
+  barcodeImage Bytes?    @db.Image
+  scanDate     DateTime? @db.DateTime
+  barcodeImageURL String? @db.NVarChar(250)
+}
+
+model Scans {
+  ID                    Int       @id(map: "PK_Scans") @default(autoincrement())
+  ScanDate              DateTime? @db.DateTime
+  ReaderID              Int?
+  Barcode               String?   @db.NVarChar(50)
+  DeliveryNote          String?   @db.NVarChar(50)
+  CustomerNumber        String?   @db.NVarChar(20)
+  ProfileID             Int?
+  QualityCodeNo         Int?
+  Upc                   String?   @db.NVarChar(50)
+  ReadingLocation       String?   @db.NVarChar(100)
+  Img                   Bytes?    @db.Image
+  Img2                  Bytes?    @db.Image
+  Img3                  Bytes?    @db.Image
+  IsUnique              Boolean?
+  Latitude              Float?
+  Longitude             Float?
+  Del                   Boolean?
+  ScanRespones          String?   @db.NVarChar(1024)
+  LangCode              String?   @db.NVarChar(50)
+  SiteID                Int?
+  AutoScannedSon        Boolean?
+  Feedback              String?   @db.NVarChar(1024)
+  InheritedDeliveryNote String?   @db.NVarChar(50)
+  InheritedUpc          String?   @db.NVarChar(50)
+
+  @@index([CustomerNumber, ScanDate], map: "IX_CUSTOMER_DATE")
+  @@index([Barcode], map: "IX_Scans")
+  @@index([DeliveryNote], map: "IX_Scans_1")
+  @@index([ScanDate], map: "IX_Scans_3")
+}
+
+model Sites {
+  SiteID    Int      @id(map: "PK_Sites") @default(autoincrement())
+  SiteName  String   @db.NVarChar(50)
+  Address   String?  @db.NVarChar(100)
+  Latitude  Decimal? @db.Decimal(12, 8)
+  Longitude Decimal? @db.Decimal(12, 8)
+  Tolerance Decimal? @db.Decimal(4, 0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SitesCostumer {
+  SiteID         Int
+  CustomerNumber String @db.NVarChar(20)
+  CustomerID     Int?
+
+  @@index([SiteID], map: "IX_SitesCostumer")
+  @@index([CustomerID], map: "IX_SitesCostumer_1")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model T_ERROR_MSG_TRANS {
+  ID               Int     @default(autoincrement())
+  ErrorMsgID       Int?
+  LangID           Int?
+  ErrorTranslation String? @db.NVarChar(150)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model T_LANGUAGE_CODES {
+  ID              Int     @default(autoincrement())
+  LangID          Int?
+  LangCode        String? @db.NVarChar(50)
+  LangCountryCode String? @db.NVarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model T_LANGUAGES {
+  ID       Int     @default(autoincrement())
+  Language String? @db.NVarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model T_LOGIN_LOGOUT_LOGS {
+  ID              Int       @default(autoincrement())
+  UserID          Int?
+  UserName        String?   @db.NVarChar(1024)
+  Password        String?   @db.NVarChar(1024)
+  IP              String?   @db.NVarChar(1024)
+  LogoutDateStamp DateTime? @db.DateTime
+  CustomerNumber  String?   @db.NVarChar(1024)
+  GMTID           String?   @db.NVarChar(1024)
+  IsAdmin         Boolean?
+  DateStamp       DateTime? @db.DateTime
+
+  @@ignore
+}
+
+model T_LOGS {
+  ID        Int       @id(map: "PK_T_LOGS") @default(autoincrement())
+  TableName String?   @db.VarChar(50)
+  Action    String?   @db.VarChar(50)
+  UserID    Int?
+  Changes   String?   @db.NVarChar(4000)
+  PK        Int?
+  DateStamp DateTime? @db.DateTime
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model T_PASS_CHANGE_LOG {
+  ID            Int       @default(autoincrement())
+  CreateDate    DateTime? @db.DateTime
+  UserID        Int?
+  Token         String?   @db.VarChar(32)
+  IP            String?   @db.VarChar(50)
+  DomainID      Int?
+  Del           Boolean?
+  ChangedPwDate DateTime? @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model T_SCANS_LOGS {
+  ID              Int       @default(autoincrement())
+  ScanDate        DateTime? @db.DateTime
+  GMT             String?   @db.NVarChar(100)
+  Upc             String?   @db.NVarChar(50)
+  Barcode         String?   @db.NVarChar(50)
+  DeliveryNote    String?   @db.NVarChar(50)
+  UserName        String?   @db.NVarChar(50)
+  UserCompany     String?   @db.NVarChar(50)
+  UserAddress     String?   @db.NVarChar(50)
+  UserCountry     String?   @db.NVarChar(50)
+  UserState       String?   @db.NVarChar(50)
+  UserPhone       String?   @db.NVarChar(50)
+  UserZip         String?   @db.NVarChar(50)
+  UserEmail       String?   @db.NVarChar(50)
+  DeviceType      String?   @db.NVarChar(50)
+  DeviceVersion   String?   @db.NVarChar(50)
+  Latitude        Float?
+  Longitude       Float?
+  ErrorCode       Int?
+  Error           String?   @db.NVarChar(1024)
+  ReaderName      String?   @db.NVarChar(1024)
+  ReadingLocation String?   @db.NVarChar(1024)
+  ProfileID       Int?
+  CustomerNumber  String?   @db.NVarChar(1024)
+  Sync            Boolean?
+
+  @@ignore
+}
+
+model TestScan {
+  ID            Int       @id(map: "PK_TestScan") @default(autoincrement())
+  ScanDate      DateTime? @db.DateTime
+  Barcode       String?   @db.NVarChar(50)
+  Title         String?   @db.NVarChar(50)
+  Description   String?   @db.NVarChar(150)
+  QualityCodeNo Int?
+  Del           Boolean?
+  StartDate     String?   @db.NVarChar(50)
+  ElpasedTime   String?   @db.NVarChar(20)
+  Model         String?   @db.NVarChar(50)
+  Volume        String?   @db.NVarChar(50)
+  TestTemp      String?   @db.NVarChar(50)
+  ManDate       DateTime? @db.DateTime
+  ManType       String?   @db.NVarChar(50)
+  IncubatorNo   String?   @db.NVarChar(50)
+  DomainID      Int?
+  UserID        Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model TestScanUsers {
+  ID       Int     @default(autoincrement())
+  UserName String? @db.NVarChar(50)
+  Password String? @db.NVarChar(20)
+  DomainID Int?
+
+  @@ignore
+}
+
+model Themes {
+  ID         Int      @id(map: "PK_Themes") @default(autoincrement())
+  ThemeName  String?  @db.NVarChar(50)
+  Logo       String?  @db.NVarChar(1024)
+  BackColor1 String?  @db.NVarChar(50)
+  BackColor2 String?  @db.NVarChar(50)
+  DomainID   Int?
+  Del        Boolean?
+}
+
+model UserCustomer {
+  UserID     Int
+  CustomerID String @db.NVarChar(20)
+
+  @@id([UserID, CustomerID], map: "PK_UserCustomer")
+  @@index([UserID], map: "IX_UserCustomer")
+}
+
+model Users {
+  ID             Int      @id(map: "PK_Users") @default(autoincrement())
+  LastName       String?  @db.NVarChar(50)
+  FirstName      String?  @db.NVarChar(50)
+  UserName       String?  @db.NVarChar(50)
+  Password       String?  @db.NVarChar(20)
+  Email          String?  @db.VarChar(50)
+  EmailConfirmed Boolean?
+  TokenEmail     String?  @db.VarChar(32)
+  IsSetup        Boolean?
+  CustomerNumber String?  @db.NVarChar(20)
+  Remark         String?  @db.NVarChar(100)
+  GMTID          String?  @db.NVarChar(200)
+  GmtDesc        String?  @db.NVarChar(400)
+  IsAdmin        Boolean?
+  RuleID         Int?
+  RowAmount      Int?
+  FirstPage      String?  @db.NVarChar(50)
+  DomainID       Int?
+}
+
+model UserSite {
+  UserID Int
+  SiteID Int
+
+  @@id([UserID, SiteID], map: "PK_UserSite")
+}
