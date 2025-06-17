@@ -8,15 +8,15 @@ const Layout: React.FC<React.PropsWithChildren & { currentLocation: string }> = 
 			<NavbarBrand>
 				<p className="font-bold text-inherit">Varcode</p>
 			</NavbarBrand>
-			<NavbarContent className="hidden sm:flex gap-4" justify="center">
+			<NavbarContent className="hidden gap-4 sm:flex" justify="center">
 				<NavbarItem isActive={currentLocation === '/customers'}>
 					<RemixLink to="/customers">Customers</RemixLink>
 				</NavbarItem>
 				<NavbarItem isActive={currentLocation === '/uploadExcel'}>
-					<RemixLink to="/uploadExcel">upload excel</RemixLink>
+					<RemixLink to="/uploadExcel">Upload excel</RemixLink>
 				</NavbarItem>
 				<NavbarItem isActive={currentLocation === '/'}>
-					<RemixLink to="/">home</RemixLink>
+					<RemixLink to="/">Home</RemixLink>
 				</NavbarItem>
 				<NavbarItem isActive={currentLocation === '/failedScans'}>
 					<RemixLink to="/failedScans">Failed Scans(take a moment to load)</RemixLink>

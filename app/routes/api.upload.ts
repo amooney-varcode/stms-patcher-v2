@@ -16,9 +16,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			for (const labelBox of labelsBoxes) {
 				const { box, labels } = labelBox as { box: Boxes; labels: Labels[] };
 				const preparedBox = prepareBox(box);
-
 				// eslint-disable-next-line no-await-in-loop
 				const isSuccess = await insertBox(preparedBox);
+
 				// eslint-disable-next-line no-await-in-loop
 				const duplicatedLabels = await insertLabels(labels);
 

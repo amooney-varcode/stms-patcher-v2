@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Parser } from 'json2csv';
+import Papa from 'papaparse';
 import { saveAs } from 'file-saver';
 
 export const undefinedGuard = <T>(value: T | undefined | null): value is T => (value || false) as boolean;
@@ -39,6 +40,7 @@ export const isFieldVInvlidInExcel = (field: { [key: string]: string | undefined
 	return false;
 };
 
+/* Consider later
 export function downloadCSV(jsonArray, filename) {
 	const parser = new Parser({ header: true });
 	let csv = '';
@@ -51,6 +53,24 @@ export function downloadCSV(jsonArray, filename) {
 		// Convert labels to CSV
 		csv += parser.parse(item.duplicatedLabels);
 		csv += '\n\n'; // Add extra newline to separate each box-labels combo
+	});
+
+	const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+	saveAs(blob, filename);
+}
+*/
+
+export function downloadCSV(jsonArray, filename) {
+	let csv = '';
+
+	jsonArray.forEach((item) => {
+		// Convert box to CSV
+		csv += Papa.unparse([item.box]);
+		csv += '\n';
+
+		// Convert labels to CSV
+		csv += Papa.unparse(item.duplicatedLabels);
+		csv += '\n\n';
 	});
 
 	const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

@@ -72,8 +72,7 @@ const __LayoutUploadExcel = () => {
 
 						if (invalidField) {
 							alert(
-								`ERROR: "${invalidField} - is empty" in excel file! row -- recordId: ${row.data['Record ID'] ?? 'empty'} boxNumber: ${
-									row.data['Box number'] ?? 'empty'
+								`ERROR: "${invalidField} - is empty" in excel file! row -- recordId: ${row.data['Record ID'] ?? 'empty'} boxNumber: ${row.data['Box number'] ?? 'empty'
 								}, \n nothing was uploaded!`
 							);
 
@@ -110,7 +109,7 @@ const __LayoutUploadExcel = () => {
 		<div className="flex w-screen place-content-center place-items-center h-96">
 			<ClientOnly fallback="loading...">
 				{() => (
-					<form onSubmit={onSubmit} className="flex gap-4 flex-col">
+					<form onSubmit={onSubmit} className="flex flex-col gap-4">
 						<h1>Upload excel for labels - boxes system only!</h1>
 						<Checkbox isSelected={shouldPrependZero} onValueChange={setShouldPrependZero}>
 							Should Prepend 0 to box number? ( doesn't effect box numbers with zero already prepended )
