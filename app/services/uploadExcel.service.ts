@@ -120,7 +120,11 @@ export const isBoxExists = async (boxNumber: string) => {
 export const whichLabelsAlreadyExists = async (labels: Labels[]) => {
 	const labelsNumbers = labels.map((label) => label.LabelID);
 	const boxNumber = labels[0].BoxNumber;
-	const existingLabels = await prisma.labels.findMany({ where: { LabelID: { in: labelsNumbers }, BoxNumber: boxNumber } });
+
+	// Consider following with boxNumber later
+	// const existingLabels = await prisma.labels.findMany({ where: { LabelID: { in: labelsNumbers }, BoxNumber: boxNumber } });
+	const existingLabels = await prisma.labels.findMany({ where: { LabelID: { in: labelsNumbers } }, select: { LabelID: true } });
+
 	return existingLabels;
 };
 
@@ -141,3 +145,21 @@ export const insertLabels = async (labels: Labels[]): Promise<Set<string>> => {
 	const insertedLabels = await prisma.labels.createMany({ data: newLabels.map(prepareLabel) });
 	return existingLabelsSet;
 };
+
+/* Not available for SQL Server
+export async function insertLabels(labels: Labels[]) {
+	const duplicatedLabels = new Set<string>();
+
+	try {
+		await prisma.labels.createMany({
+			data: labels.map(prepareLabel),
+			skipDuplicates: true,
+		});
+
+	} catch (e) {
+		console.error('Error inserting labels:', e);
+		throw e;
+	}
+
+	return duplicatedLabels;
+}*/
